@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Book | Books Management{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1><i class="fas fa-edit book-icon"></i>Edit Book</h1>
+        <p>Update the details of your book in the library collection</p>
+    </div>
+
+    <!-- Edit Book Form -->
+    <div class="form-container slide-in">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form action="/edit-book/edit" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="bid" value="{{book.id}}">
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="title">
+                                    <i class="fas fa-book me-2"></i>Book Title
+                                </label>
+                                <input type="text" class="form-control" id="title" placeholder="Enter the book title" name="title" value="{{book.title}}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="author">
+                                    <i class="fas fa-user me-2"></i>Author
+                                </label>
+                                <input type="text" class="form-control" id="author" placeholder="Enter the author name" name="author" value="{{book.author|default:''}}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="price">
+                                    <i class="fas fa-rupee-sign me-2"></i>Price
+                                </label>
+                                <input type="number" class="form-control" id="price" placeholder="Enter the book price" name="price" value="{{book.price}}" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">
+                            <i class="fas fa-align-left me-2"></i>Description
+                        </label>
+                        <textarea class="form-control" id="description" rows="4" placeholder="Enter book description (optional)" name="description">{{book.description|default:''}}</textarea>
+                    </div>
+                    
+                    <div class="text-center mt-5">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-save me-2"></i>Update Book
+                        </button>
+                        <a href="/view-book" class="btn btn-outline-secondary btn-lg ml-3">
+                            <i class="fas fa-list me-2"></i>View All Books
+                        </a>
+                        <a href="/delete-book?bookid={{book.id}}" class="btn btn-danger btn-lg ml-3" onclick="return confirm('Are you sure you want to delete this book?')">
+                            <i class="fas fa-trash me-2"></i>Delete Book
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Book Information Card -->
+    <div class="row mt-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="custom-card p-4">
+                <h5 class="text-primary mb-3">
+                    <i class="fas fa-info-circle me-2"></i>Book Information
+                </h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Book ID:</strong> {{book.id}}</p>
+                        <p><strong>Title:</strong> {{book.title}}</p>
+                        <p><strong>Price:</strong> ₹{{book.price}}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Author:</strong> {{book.author|default:"Not specified"}}</p>
+                        <p><strong>ISBN:</strong> {{book.isbn|default:"Not specified"}}</p>
+                        <p><strong>Status:</strong> <span class="badge badge-success">Active</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

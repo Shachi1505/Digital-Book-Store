@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Book | Library Management{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1><i class="fas fa-book-medical book-icon"></i>Add New Book</h1>
+        <p>Enter the details of the new book to add it to your library collection</p>
+    </div>
+
+    <!-- Success Message -->
+    {% if message %}
+    <div class="alert alert-success fade-in" role="alert">
+        <i class="fas fa-check-circle me-2"></i>{{ message }}
+    </div>
+    {% endif %}
+
+    <!-- Add Book Form -->
+    <div class="form-container slide-in">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form action="/add-book/add" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="title">
+                                    <i class="fas fa-book me-2"></i>Book Title
+                                </label>
+                                <input type="text" class="form-control" id="title" placeholder="Enter the book title" name="title" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="price">
+                                    <i class="fas fa-rupee-sign me-2"></i>Price
+                                </label>
+                                <input type="number" class="form-control" id="price" placeholder="Enter the book price" name="price" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="author">
+                                    <i class="fas fa-user me-2"></i>Author
+                                </label>
+                                <input type="text" class="form-control" id="author" placeholder="Enter the author name" name="author">
+                            </div>
+                        </div>
+                  
+                    </div>
+                    
+                    
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-plus-circle me-2"></i>Add Book to Library
+                        </button>
+                       
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="custom-card text-center p-4">
+                <i class="fas fa-book fa-3x text-primary mb-3"></i>
+                <h5>Easy Management</h5>
+                <p class="text-muted">Add and organize your books effortlessly</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="custom-card text-center p-4">
+                <i class="fas fa-search fa-3x text-primary mb-3"></i>
+                <h5>Quick Search</h5>
+                <p class="text-muted">Find any book in your collection instantly</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="custom-card text-center p-4">
+                <i class="fas fa-edit fa-3x text-primary mb-3"></i>
+                <h5>Easy Updates</h5>
+                <p class="text-muted">Edit book details whenever needed</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

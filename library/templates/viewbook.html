@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}View Books | Books Management{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1><i class="fas fa-books book-icon"></i>Books Collection</h1>
+        <p>Browse and manage your complete book collection</p>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto">
+            <div class="custom-card p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h5 class="mb-1">
+                            <i class="fas fa-chart-bar me-2 text-primary"></i>Books Statistics
+                        </h5>
+                        <p class="text-muted mb-0">Total Books: <strong>{{books|length}}</strong> | 
+                        <a href="/add-book" class="text-primary">Add New Book</a></p>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <a href="/add-book" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Add Book
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Books Table -->
+    {% if books %}
+    <div class="table-container slide-in">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            <i class="fas fa-hashtag me-2"></i>#
+                        </th>
+                        <th scope="col">
+                            <i class="fas fa-book me-2"></i>Title
+                        </th>
+                        <th scope="col">
+                            <i class="fas fa-user me-2"></i>Author
+                        </th>
+                        <th scope="col">
+                            <i class="fas fa-rupee-sign me-2"></i>Price
+                        </th>
+                        <th scope="col">
+                            <i class="fas fa-barcode me-2"></i>ISBN
+                        </th>
+                        <th scope="col" class="text-center">
+                            <i class="fas fa-cogs me-2"></i>Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-book text-primary me-2"></i>
+                                <strong>{{book.title}}</strong>
+                            </div>
+                        </td>
+                        <td>{{book.author|default:"Not Specified"}}</td>
+                        <td>
+                            <span class="badge badge-success">₹{{book.price}}</span>
+                        </td>
+                        <td>
+                            <code>{{book.isbn|default:"N/A"}}</code>
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group" role="group">
+                                <a href="/edit-book?bookid={{book.id}}" class="btn btn-outline-primary btn-sm" title="Edit Book">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="/delete-book?bookid={{book.id}}" class="btn btn-outline-danger btn-sm" title="Delete Book" onclick="return confirm('Are you sure you want to delete this book?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="custom-card text-center p-5">
+                <i class="fas fa-book-open fa-5x text-muted mb-4"></i>
+                <h4 class="text-muted">No Books Found</h4>
+                <p class="text-muted mb-4">Your book store is empty. Start by adding your first book!</p>
+                <a href="/add-book" class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus me-2"></i>Add Your First Book
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Library Features -->
+    <div class="row mt-5">
+        <div class="col-md-3">
+            <div class="custom-card text-center p-4 h-100">
+                <i class="fas fa-search fa-3x text-primary mb-3"></i>
+                <h6>Search Books</h6>
+                <p class="text-muted small">Find books quickly by title, author, or ISBN</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="custom-card text-center p-4 h-100">
+                <i class="fas fa-edit fa-3x text-primary mb-3"></i>
+                <h6>Edit Details</h6>
+                <p class="text-muted small">Update book information anytime</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="custom-card text-center p-4 h-100">
+                <i class="fas fa-plus fa-3x text-primary mb-3"></i>
+                <h6>Add Books</h6>
+                <p class="text-muted small">Expand your collection easily</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="custom-card text-center p-4 h-100">
+                <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                <h6>Track Value</h6>
+                <p class="text-muted small">Monitor your collection's worth</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for enhanced interactions -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add hover effects to table rows
+    const tableRows = document.querySelectorAll('tbody tr');
+    tableRows.forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.02)';
+        });
+        row.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+    
+    // Add confirmation for delete actions
+    const deleteButtons = document.querySelectorAll('a[href*="delete-book"]');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (!confirm('Are you sure you want to delete this book? This action cannot be undone.')) {
+                e.preventDefault();
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
