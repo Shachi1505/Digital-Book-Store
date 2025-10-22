@@ -23,10 +23,14 @@ def homeView(request):
         "authors": unique_authors,
         "total_value": total_value
     })
-
 def helloView(request):
-    books=Book.objects.all()
-    return render(request,"viewbook.html",{"books":books})
+    search_query = request.GET.get('search', '')
+    if search_query:
+        # Search for books by title (case-insensitive)
+        books = Book.objects.filter(title__icontains=search_query).order_by('-id')
+    else:
+        books = Book.objects.all().order_by('-id')
+    return render(request,"viewbook.html",{"books":books, "search_query":search_query})
 
 def addBookView(request):
     return render(request,"addbook.html")
@@ -68,3 +72,4 @@ def deleteBookView(request):
     book=Book.objects.get(id=request.GET['bookid'])
     book.delete()
     return HttpResponseRedirect('/')
+
